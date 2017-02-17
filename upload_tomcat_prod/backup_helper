@@ -2,8 +2,6 @@
 set -e
 backup_path="/home/backup"
 tomcat_path="/usr/share/apache-tomcat-7.0.73/webapps"
-
-#file_name="webapps."$(date +"%d-%m-%Y")".tar.gz"
 file_name="webapps."$(date +"%d-%m-%Y")
 
 #looking for today's backup
