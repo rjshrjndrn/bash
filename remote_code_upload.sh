@@ -1,16 +1,16 @@
-#################################################
+#########################################################################
 #
-# This is a simple script for staging uploading
-# Created By Rajesh Rajendran <rajesh@lukup.com>
+# This is a simple script for uploading your code to production server
+# 
+# Created By Rajesh Rajendran <rjshrjndrn@gmail.com>
 #
-#################################################
+##########################################################################
 
 #!/bin/bash
 set -e
 
 tomcat_path="/usr/share/apache-tomcat-7.0.73/webapps"
-
-#echo -e "\nTHIS SCRIPT IS FOR UPLOADING WAR FILES TO TESTING SERVER !!!\n\n\tIF YOU WANT TO CANCEL PRESS CTRL+C IN\n "
+server_name=<enter your server name>
 
 ########################
 # reading user choice
@@ -67,7 +67,9 @@ function choice_selection {
 }
 
 #######################
-#checkig for arguments
+# main funtion
+#
+# checking for arguments
 #######################
 
 if [ $# -ne 0 ]; then
@@ -83,20 +85,20 @@ fi
 echo "choice=$choice"
 echo "name=$name"
 echo -e "\nchecking for backup\n"
-ssh -n staging.lukup.com backup_helper
+ssh -n $server_name backup_helper
 
 #################
 #uploading files
 #################
 
-rsync -avz $name "staging.lukup.com:$tomcat_path/"
+rsync -avz $name "$server_name:$tomcat_path/"
 
 ##########################
 #changing configurations
 ##########################
 
 echo -e "\nchanging configurations \n"
-ssh -n staging.lukup.com conf_changer $choice
+ssh -n $server_name conf_changer $choice
 
 #######################################
 #waiting for user to intercept restart 
@@ -114,6 +116,6 @@ echo -e "\n"
 # restarting tomcat
 ##########################
 
-ssh -n staging.lukup.com /root/restart.sh
+ssh -n $server_name /root/restart.sh
 sleep 3s
-ssh -n staging.lukup.com tail -f $tomcat_path/../logs/catalina.out
+ssh -n $server_name tail -f $tomcat_path/../logs/catalina.out
