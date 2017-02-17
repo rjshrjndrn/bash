@@ -1,0 +1,32 @@
+#!/bin/bash
+set -e
+backup_path="/home/backup"
+tomcat_path="/usr/share/apache-tomcat-7.0.73/webapps"
+
+#file_name="webapps."$(date +"%d-%m-%Y")".tar.gz"
+file_name="webapps."$(date +"%d-%m-%Y")
+
+#looking for today's backup
+
+if [ -f $backup_path"/"$file_name* ];then
+        echo -e "$backup_path/$file_name already backed up "
+        rm -f $backup_path/000*
+        touch $backup_path"/000"$(date +"%d")
+        exit 0
+fi
+
+#checking for old backup and move it to storage path
+
+flag=$(ls $backup_path | grep 000)
+
+if [ $flag -ne "000"$(date +"%d") ];then
+        mv $backup_path"/"*".tar.gz" /mnt/
+fi
+
+echo -e "\n\t creating backup\n"
+tar -cvzf "$backup_path/$file_name.tar.gz" $tomcat_path
+echo -e "\n backup complete"
+
+rm -f $backup_path/000*
+touch $backup_path"/000"$(date +"%d")
+

@@ -1,0 +1,35 @@
+#!/bin/bash
+set -e
+tomcat_path="/usr/share/apache-tomcat-7.0.73/webapps"
+ 
+#waiting for unpacking .war
+echo -e "waiting for unpacking \n"
+for i in $(seq 1 8);
+do
+sleep 1s
+echo -e " *\c"
+done
+echo -e "\n"
+
+case $1 in
+1) #functionality 1
+        echo "changing func1 files "
+        sed -i "s/<localchanges>/<production changes>/g" $tomcat_path"/<properties>"
+        ;;
+2) #functionality 2
+        echo "changing func2 files"
+        sed -i "s/<localchanges>/<production changes>/g" $tomcat_path"/<properties>"
+        ;;
+3) #functionality 3
+        echo "changing func3 files"
+        sed -i "s/<localchanges>/<production changes>/g" $tomcat_path"/<properties>"
+        ;;
+4) #functionality4
+        echo "changing func4 files"
+        sed -i "s/<localchanges>/<production changes>/g" $tomcat_path"/<properties>"
+        ;;
+*)
+        exit 1
+esac
+
+exit 0
